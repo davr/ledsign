@@ -5,6 +5,9 @@
 // How long to display each row for
 #define DISPLAY_PERIOD 10
 
+// How many total frames (more == more shades of brightness, but lower FPS)
+#define DISPLAY_FRAMES 8
+
 
 #include <TimerOne.h>
 
@@ -29,6 +32,8 @@ void randomize_display() {
 boolean displaying = false;
 byte disp_ctr = 0;
 int disp_row=0;
+
+int disp_frame=0;
 
 // We actually set the interrupt here, and comment out the handler in
 // Timer1.h, just to speed things up a tiny amount
@@ -60,6 +65,9 @@ ISR(TIMER1_OVF_vect) {
     if(disp_ctr >= VBLANK_PERIOD) {
       disp_ctr=0;
       disp_row=0;
+      disp_frame++;
+      if(disp_frame >= DISPLAY_FRAMES)
+	      disp_frame = 0;
     } else {
       return;
     }
@@ -69,7 +77,7 @@ ISR(TIMER1_OVF_vect) {
     
   // Shift 14 bits out to each of the 8 logical shift register chains
   for(byte c=0;c<14;c++) {    
-    PORTB = disp[c+14*disp_row];
+    PORTB = (disp_frame >= c && c<r)?0xFE:0;  //disp[c+14*disp_row];
     digitalWrite(clkPin, LOW);
     digitalWrite(clkPin, HIGH);
   }
