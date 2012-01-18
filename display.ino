@@ -5,10 +5,20 @@
 // How long to display each row for
 #define DISPLAY_PERIOD 10
 
+
+#include <TimerOne.h>
+
 unsigned char *disp0;
 unsigned char *disp;
 unsigned char disp1[224];
 unsigned char disp2[224];
+
+void init_display() {
+  randomize_display();
+
+  Timer1.initialize(100);
+  Timer1.attachInterrupt(updateDisplay, 100);
+}
 
 void randomize_display() {
   disp = disp1;

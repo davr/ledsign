@@ -1,4 +1,3 @@
-#include <TimerOne.h>
 
 const int ledPin = 11;   // Teensy has LED on 11, Teensy++ on 6
 
@@ -24,10 +23,13 @@ const int rstPin = 20;
 const int btnPin = 19;
 
 void setup() {
-  
-  randomize_display();
-  
   Serial.begin(9600);
+
+  init_pins();
+  init_display();
+}
+
+void init_pins() {
   
   for(int i=0;i<8;i++) {
     pinMode(dPins[i], OUTPUT);
@@ -53,9 +55,7 @@ void setup() {
   
   digitalWrite(eBothPin, LOW);
   digitalWrite(eFirstPin, HIGH);
-  
-  Timer1.initialize(100);
-  Timer1.attachInterrupt(updateDisplay, 100);
+
 }
 
 void loop() { 
