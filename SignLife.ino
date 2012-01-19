@@ -1,3 +1,7 @@
+#define MODE_LIFE 1
+#define MODE_TETRIS 2
+
+int mode = MODE_LIFE;
 
 const int ledPin = 11;   // Teensy has LED on 11, Teensy++ on 6
 
@@ -56,9 +60,24 @@ void init_pins() {
   digitalWrite(eBothPin, LOW);
   digitalWrite(eFirstPin, HIGH);
 
+  setup_tetris();
 }
 
+long int last_time = 0;
+
 void loop() { 
-  loop_tetris();
+  if(mode == MODE_TETRIS)
+    loop_tetris();
+  else
+    loop_life();
+    
+  if(millis() - last_time > 30000) {
+    if(mode == MODE_TETRIS)
+      mode = MODE_LIFE;
+    else
+      mode = MODE_TETRIS;
+    last_time = millis();
+    randomize_display();
+  }
 }
 

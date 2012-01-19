@@ -67,10 +67,10 @@ int life_x_ctr=0;
 void loop_life() {
 
   while(digitalRead(btnPin)) {
-    randomize_display();
-    life_x_ctr = generations =0;
+    mode = MODE_TETRIS;
+    delay(100);
   }
-
+  
   dolife(life_x_ctr);
   life_x_ctr++;
   if(life_x_ctr>111) {
