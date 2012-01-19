@@ -1,12 +1,12 @@
 // period is microseconds / 10
 // How long to wait inbetween displaying all the rows
-#define VBLANK_PERIOD 30
+#define VBLANK_PERIOD 0
 
 // How long to display each row for
-#define DISPLAY_PERIOD 10
+#define DISPLAY_PERIOD 0
 
 // How many total frames (more == more shades of brightness, but lower FPS)
-#define DISPLAY_FRAMES 8
+#define DISPLAY_FRAMES 4
 
 
 #include <TimerOne.h>
@@ -25,7 +25,7 @@ void init_display() {
 
 void randomize_display() {
   disp = disp1;
-  for(int i=0; i<256; i++)
+  for(int i=0; i<224; i++)
     disp1[i] = disp2[i] = rand() & 0xFF; 
 }  
 
@@ -39,17 +39,17 @@ int disp_frame=0;
 // Timer1.h, just to speed things up a tiny amount
 void updateDisplay() {}
 ISR(TIMER1_OVF_vect) {
-
+  digitalWrite(ledPin, HIGH);
   // We wait a bit after displaying each row
   if(displaying) {
     disp_ctr++;
-    if(disp_ctr < DISPLAY_PERIOD)
+    if(disp_ctr < (DISPLAY_PERIOD))
       return;
       
     disp_ctr=0;
     
     // Disable the 3-to-8 decoders output
-    digitalWrite(eBothPin, LOW);
+    digitalWrite(eBothPin, HIGH);
     digitalWrite(eFirstPin, HIGH);
   
     // Reset the shift registers (probably not needed, but can't hurt)
@@ -77,7 +77,14 @@ ISR(TIMER1_OVF_vect) {
     
   // Shift 14 bits out to each of the 8 logical shift register chains
   for(byte c=0;c<14;c++) {    
-    PORTB = (disp_frame >= c && c<r)?0xFE:0;  //disp[c+14*disp_row];
+    if(c < 7)
+      PORTB = 0xFF;
+    else if(disp_frame == 0)
+      PORTB = 0xFF;
+    else
+      PORTB = 0;
+      
+    //PORTB = disp[c+14*disp_row];
     digitalWrite(clkPin, LOW);
     digitalWrite(clkPin, HIGH);
   }

@@ -53,8 +53,9 @@ void dolife(int x) {
       randomize_display();
       
     cells_born=0;
-    for(int i=0; i<256; i++)
+    for(int i=0; i<224; i++)
       disp[i] = 0;
+    while(disp_row != 16) ;
     disp = disp0;
   }
 }
