@@ -29,6 +29,11 @@ void randomize_display() {
     disp1[i] = disp2[i] = rand() & 0xFF; 
 }  
 
+void clear_display(unsigned char *disp_in) {
+    for(int i=0; i<224; i++)
+      disp_in[i] = 0;
+}
+
 boolean displaying = false;
 byte disp_ctr = 0;
 int disp_row=0;

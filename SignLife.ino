@@ -59,6 +59,6 @@ void init_pins() {
 }
 
 void loop() { 
-  loop_life();
+  loop_tetris();
 }
 
