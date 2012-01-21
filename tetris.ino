@@ -20,15 +20,15 @@ byte pieces[] = {
 };
 
 
-byte piece[9][2];
+byte piece[10][2];
 
-signed char px[9];
-signed char py[9];
+signed char px[10];
+signed char py[10];
 
-byte board[9][32]; // 16x16 / 8
+byte board[10][32]; // 16x16 / 8
 
 void run_board(byte b) {
-  int board_x = b*12+1;
+  int board_x = b*11;
   int board_y = 0;
 
   if(piece[b][0] == 0 && piece[b][1] ==  0x00){
@@ -42,15 +42,16 @@ void run_board(byte b) {
   }  
   
   for(byte y=0;y<16;y++) {
-    setpx(board_x-1, y, 1);
     setpx(board_x+10, y, 1);
   }
   
   
+  // draw the board on the scren
   for(byte y=0;y<16;y++)
     for(byte x=0; x<10; x++)
       setpx(board_x+x, board_y+y, board[b][y*2 + (x/8)] & 1<<(x&7));
       
+  // draw the falling piece on the screen
   for(byte y=0; y<4; y++) {
 	  for(byte x=0; x<4; x++) {
                 byte bt = piece[b][y>1] & 1<<(x+(y&1)*4);
@@ -59,6 +60,8 @@ void run_board(byte b) {
 	  }
   }
   
+  
+////////// determine if piece will hit something on next drop
   py[b]++;
 
   byte hit=0;
@@ -73,7 +76,9 @@ void run_board(byte b) {
 	  }
   }
   if(py[b] > 14) hit=1;
+//////////
   
+  // if piece will hit something, copy it onto the board and generate a new piece
   if(hit) {
     py[b]--;
     for(byte y=0; y<4; y++) {
@@ -83,18 +88,17 @@ void run_board(byte b) {
   	  }
   
     }     
-  }
-  
-  if(hit) {
-          if(py[b] <= 0) {
-            for(byte i=0; i<32; i++)
-             board[b][i]=0; 
-            //delay(1000);
-          }
-            
-	  py[b] = 0;
-	  piece[b][0] = piece[b][1] = 0x00;
-          px[b] = rand()%6+1;
+
+    // if the board is full, clear it
+    if(py[b] <= 0) {
+      for(byte i=0; i<32; i++)
+       board[b][i]=0; 
+      //delay(1000);
+    }
+      
+    py[b] = 0;
+    piece[b][0] = piece[b][1] = 0x00;
+    px[b] = rand()%6+1;
   }
 }
 
@@ -109,9 +113,13 @@ void loop_tetris() {
   } else {
     disp0 = disp1;
   } 
+
+  for(byte y=0;y<16;y++) {
+    setpx(0, y, 1);
+  }
   
  // setpx(frame%112, frame%16, 1);
- for(byte i=0;i<9;i++) {
+ for(byte i=0;i<10;i++) {
    run_board(i);
  }
 
