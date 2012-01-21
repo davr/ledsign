@@ -96,7 +96,7 @@ void find_best_spot(byte b) {
 	  for(byte x=0; x<4 && py<100; x++) {
 	    if( (piece[b][y>1] & 1<<(x+(y&1)*4))
 	      && (
-		x+px>9 || y+py>14
+		x+px>9 || y+py>14 ||
 		(board[b][(y+py)*2 + ((x+px)/8)] & 1<<((x+px)&7))
 		)
 	      ) {
@@ -112,7 +112,7 @@ void find_best_spot(byte b) {
       if(score>best_score || (score == best_score && rand()&7==1)) {
 	best_score = score;
 	best_rot = rot;
-	best_x = x;
+	best_x = px;
       }
      // if(py[b] > 15) hit=1;
     }
@@ -160,7 +160,7 @@ void run_board(byte b) {
   
   // rotate piece if needed
   if(targetrot[b] > 0) {
-    rotate_piece[b];
+    rotate_piece(b);
     targetrot[b]--;
   }
   
