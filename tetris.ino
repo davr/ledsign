@@ -123,7 +123,7 @@ void find_best_spot(byte b) {
   targetrot[b] = best_rot;
 }
 
-void run_board(byte b) {
+void run_board(byte b, boolean moveit) {
   int board_x = b*11+1;
   int board_y = 0;
 
@@ -133,10 +133,10 @@ void run_board(byte b) {
     piece[b][0] = pieces[rand()%6];
 
     // rotate it randomly
-    for(byte r=rand()&3; r<3; r++) {
+/*    for(byte r=rand()&3; r<3; r++) {
       rotate_piece(b);
     }
-
+*/
     // call tetris AI to find a target location for it
     find_best_spot(b);
   }
@@ -180,6 +180,7 @@ void run_board(byte b) {
   
   
 ////////// determine if piece will hit something on next drop
+if(moveit)
   py[b]++;
 
   byte hit=0;
@@ -187,7 +188,9 @@ void run_board(byte b) {
   for(byte y=0; y<4; y++) {
 	  for(byte x=0; x<4; x++) {
               if( (piece[b][y>1] & 1<<(x+(y&1)*4))
-              && (board[b][(y+py[b])*2 + ((x+px[b])/8)] & 1<<((x+px[b])&7)) ) {
+              && (
+               (y+py[b] > 15) || 
+              (board[b][(y+py[b])*2 + ((x+px[b])/8)] & 1<<((x+px[b])&7)) ) ) {
                 hit=1;
                 break;
               }
@@ -220,6 +223,10 @@ void run_board(byte b) {
   }
 }
 
+int frame=0;
+
+byte ctrs[10];
+
 void loop_tetris() {
   while(digitalRead(btnPin)) {
     mode = MODE_LIFE;
@@ -236,16 +243,20 @@ void loop_tetris() {
     setpx(0, y, 1);
   }
   
+ 
  // setpx(frame%112, frame%16, 1);
  for(byte i=0;i<10;i++) {
-   run_board(i);
+   ctrs[i]++;   
+   if(ctrs[i]>i)
+     ctrs[i]=0;
+   run_board(i, ctrs[i]==0);
  }
 
   Serial.println("waiting vsync");
   while(disp_row != 16) ;
   clear_display(disp);
   disp = disp0;
-  delay(10);  
+//  delay(30);  
 
 }
 
