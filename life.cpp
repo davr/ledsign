@@ -66,11 +66,6 @@ int generations=0;
 int life_x_ctr=0;
 
 void loop_life() {
-
-  while(digitalRead(btnPin)) {
-    mode = MODE_TETRIS;
-    delay(100);
-  }
   
   dolife(life_x_ctr);
   life_x_ctr++;

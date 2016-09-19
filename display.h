@@ -22,5 +22,4 @@ extern unsigned char disp2[];
 
 extern volatile byte disp_row;
 
-
 #endif /* DISPLAY_H_ */

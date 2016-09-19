@@ -17,6 +17,6 @@
 #include "life.h"
 #include "SignLife.h"
 #include "tetris.h"
-
+#include "text.h"
 
 #endif /* MAIN_H_ */

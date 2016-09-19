@@ -10,17 +10,17 @@
 
 #define MODE_LIFE 1
 #define MODE_TETRIS 2
+#define MODE_TXT 3
 
 extern int mode;
 
-
-const int ledPin = 11;   // Teensy has LED on 11, Teensy++ on 6
+const int ledPin = 11; // Teensy has LED on 11, Teensy++ on 6
 
 // data pins on the shift registers
-const int dPins[] = {0,1,2,3,13,14,15,4};
+const int dPins[] = { 0, 1, 2, 3, 13, 14, 15, 4 };
 
 // row pins on the 3-to-8 decoders
-const int rPins[] = {18,17,16};
+const int rPins[] = { 18, 17, 16 };
 
 // enable pin on both decoders
 const int eBothPin = 9;
@@ -36,6 +36,5 @@ const int rstPin = 20;
 
 // user button
 const int btnPin = 19;
-
 
 #endif /* SIGNLIFE_H_ */
