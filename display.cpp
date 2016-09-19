@@ -1,3 +1,4 @@
+#include "main.h"
 // period is microseconds / 10
 // How long to wait inbetween displaying all the rows
 #define VBLANK_PERIOD 30
@@ -33,8 +34,7 @@ void clear_display(unsigned char *disp_in) {
 
 boolean displaying = false;
 byte disp_ctr = 0;
-volatile byte
-disp_row=0;
+volatile byte disp_row=0;
 
 // We actually set the interrupt here, and comment out the handler in
 // Timer1.h, just to speed things up a tiny amount

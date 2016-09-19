@@ -1,3 +1,4 @@
+#include "main.h"
 #include <avr/pgmspace.h>
 
 byte pieces[] = { 
@@ -109,7 +110,7 @@ void find_best_spot(byte b) {
 	if(hity==0) py++;
       }
       byte score = hity;
-      if(score>best_score || (score == best_score && rand()&7==1)) {
+      if(score>best_score || (score == best_score && (rand()&7)==1)) {
 	best_score = score;
 	best_rot = rot;
 	best_x = px;

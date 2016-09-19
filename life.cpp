@@ -1,3 +1,4 @@
+#include "main.h"
 
 // Count the number of alive neighbors of a cell
 int countcell(int x, int y) {
